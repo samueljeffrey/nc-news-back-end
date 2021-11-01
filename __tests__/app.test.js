@@ -50,7 +50,8 @@ describe("/api/articles/:article_id", () => {
             topic: "mitch",
             author: "rogersop",
             body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
-            created_at: new Date(1588731240000).toISOString(),
+            // created_at: new Date(1588731240000).toISOString(),
+            created_at: "2020-05-06T01:14:00.000Z",
             votes: 0,
           });
         });
@@ -60,45 +61,6 @@ describe("/api/articles/:article_id", () => {
     //
   });
 });
-
-// describe("/api/articles", () => {
-//   describe("GET", () => {
-//     test("status:200 and responds with array of valid articles (with serial article id numbers)", () => {
-//       return request(app)
-//         .get("/api/articles")
-//         .expect(200)
-//         .then((res) => {
-//           expect(res.body.articles[0]).toEqual({
-//             article_id: 1,
-//             title: "Living in the shadow of a great man",
-//             topic: "mitch",
-//             author: "butter_bridge",
-//             body: "I find this existence challenging",
-//             created_at: new Date(1594329060000).toISOString(),
-//             votes: 100,
-//           });
-//           expect(res.body.articles[4]).toEqual({
-//             article_id: 5,
-//             title: "UNCOVERED: catspiracy to bring down democracy",
-//             topic: "cats",
-//             author: "rogersop",
-//             body: "Bastet walks amongst us, and the cats are taking arms!",
-//             created_at: new Date(1596464040000).toISOString(),
-//             votes: 0,
-//           });
-//           expect(res.body.articles[8]).toEqual({
-//             article_id: 9,
-//             title: "They're not exactly dogs, are they?",
-//             topic: "mitch",
-//             author: "butter_bridge",
-//             body: "Well? Think about it.",
-//             created_at: new Date(1591438200000).toISOString(),
-//             votes: 0,
-//           });
-//         });
-//     });
-//   });
-// });
 
 describe("/api/wrongpath", () => {
   describe("GET", () => {
