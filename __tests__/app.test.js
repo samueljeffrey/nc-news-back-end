@@ -79,7 +79,7 @@ describe("/api", () => {
               topic: "mitch",
               author: "butter_bridge",
               body: "I find this existence challenging",
-              created_at: new Date(1594329060000),
+              created_at: new Date(1594329060000).toISOString(),
               votes: 100,
             });
             expect(res.body.articles[4]).toEqual({
@@ -88,7 +88,7 @@ describe("/api", () => {
               topic: "cats",
               author: "rogersop",
               body: "Bastet walks amongst us, and the cats are taking arms!",
-              created_at: new Date(1596464040000),
+              created_at: new Date(1596464040000).toISOString(),
               votes: 0,
             });
             expect(res.body.articles[8]).toEqual({
@@ -97,7 +97,7 @@ describe("/api", () => {
               topic: "mitch",
               author: "butter_bridge",
               body: "Well? Think about it.",
-              created_at: new Date(1591438200000),
+              created_at: new Date(1591438200000).toISOString(),
               votes: 0,
             });
           });
@@ -117,7 +117,7 @@ describe("/api", () => {
               votes: 16,
               author: "butter_bridge",
               article_id: 9,
-              created_at: new Date(1586179020000),
+              created_at: new Date(1586179020000).toISOString(),
             });
             expect(res.body.comments[5]).toEqual({
               comment_id: 6,
@@ -125,7 +125,7 @@ describe("/api", () => {
               votes: 0,
               author: "icellusedkars",
               article_id: 1,
-              created_at: new Date(1586642520000),
+              created_at: new Date(1586642520000).toISOString(),
             });
             expect(res.body.comments[10]).toEqual({
               comment_id: 11,
@@ -133,7 +133,7 @@ describe("/api", () => {
               votes: 0,
               author: "icellusedkars",
               article_id: 3,
-              created_at: new Date(1600560600000),
+              created_at: new Date(1600560600000).toISOString(),
             });
           });
       });
