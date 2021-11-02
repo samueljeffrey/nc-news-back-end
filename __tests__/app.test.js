@@ -126,6 +126,7 @@ describe("/api/articles", () => {
             topic: "mitch",
             author: "icellusedkars",
             created_at: "2020-11-03T09:12:00.000Z",
+            comment_count: 3,
           });
           expect(res.body.articles[1]).toEqual({
             article_id: 6,
@@ -135,6 +136,7 @@ describe("/api/articles", () => {
             topic: "mitch",
             author: "icellusedkars",
             created_at: "2020-10-18T01:00:00.000Z",
+            comment_count: 1,
           });
           expect(res.body.articles[2]).toEqual({
             article_id: 2,
@@ -144,6 +146,63 @@ describe("/api/articles", () => {
             topic: "mitch",
             author: "icellusedkars",
             created_at: "2020-10-16T05:03:00.000Z",
+            comment_count: 0,
+          });
+        });
+    });
+    test("status:200 and responds with array of articles, filtered by given topic, but with default sorting", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.articles).toEqual([
+            {
+              article_id: 5,
+              title: "UNCOVERED: catspiracy to bring down democracy",
+              body: "Bastet walks amongst us, and the cats are taking arms!",
+              votes: 0,
+              topic: "cats",
+              author: "rogersop",
+              created_at: "2020-08-03T13:14:00.000Z",
+              comment_count: 2,
+            },
+          ]);
+        });
+    });
+    test("status:200 and responds with an array, filtered and sorted by given quieres", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch&sort_by=title&order=ASC")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.articles[0]).toEqual({
+            article_id: 6,
+            title: "A",
+            body: "Delicious tin of cat food",
+            votes: 0,
+            topic: "mitch",
+            author: "icellusedkars",
+            created_at: "2020-10-18T01:00:00.000Z",
+            comment_count: 1,
+          });
+          expect(res.body.articles[1]).toEqual({
+            article_id: 11,
+            title: "Am I a cat?",
+            body: "Having run out of ideas for articles, I am staring at the wall blankly, like a cat. Does this make me a cat?",
+            votes: 0,
+            topic: "mitch",
+            author: "icellusedkars",
+            created_at: "2020-01-15T22:21:00.000Z",
+            comment_count: 0,
+          });
+          expect(res.body.articles[2]).toEqual({
+            article_id: 8,
+            title: "Does Mitch predate civilisation?",
+            body: "Archaeologists have uncovered a gigantic statue from the dawn of humanity, and it has an uncanny resemblance to Mitch. Surely I am not the only person who can see this?!",
+            votes: 0,
+            topic: "mitch",
+            author: "icellusedkars",
+            created_at: "2020-04-17T01:08:00.000Z",
+            comment_count: 0,
           });
         });
     });
