@@ -46,7 +46,8 @@ exports.patchSingleArticle = (req, res, next) => {
 };
 
 exports.getAllArticles = (req, res) => {
-  selectAllArticles().then((articles) => {
+  const { sort_by, order, topic } = req.query;
+  selectAllArticles(sort_by, order, topic).then((articles) => {
     res.status(200).send({ articles });
   });
 };

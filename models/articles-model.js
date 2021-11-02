@@ -40,8 +40,12 @@ exports.updateSingleArticle = (id, newVotes) => {
     });
 };
 
-exports.selectAllArticles = () => {
-  return db.query(`SELECT * FROM articles`).then((response) => {
+exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
+  let articlesQuery = "SELECT * FROM articles";
+  if (topic) articlesQuery += " WHERE topic = $1";
+  articlesQuery += ` ORDER BY ${sort_by} ${order}`;
+  console.log(articlesQuery);
+  return db.query(articlesQuery).then((response) => {
     return response.rows;
   });
 };
