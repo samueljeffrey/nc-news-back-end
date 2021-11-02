@@ -1,11 +1,5 @@
 const db = require("../db");
 
-exports.selectArticles = () => {
-  return db.query(`SELECT * FROM articles`).then((response) => {
-    return response.rows;
-  });
-};
-
 exports.selectSingleArticle = (id) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, [id])
@@ -18,7 +12,6 @@ exports.countArticleComments = (id) => {
   return db
     .query(`SELECT * FROM comments WHERE article_id = $1`, [id])
     .then((response) => {
-      // return response.rows;
       if (response.rows && response.rows.length) {
         return response.rows.length;
       } else {
@@ -45,4 +38,10 @@ exports.updateSingleArticle = (id, newVotes) => {
       if (updatedArticle === undefined) return undefined;
       return updatedArticle.rows[0];
     });
+};
+
+exports.selectAllArticles = () => {
+  return db.query(`SELECT * FROM articles`).then((response) => {
+    return response.rows;
+  });
 };

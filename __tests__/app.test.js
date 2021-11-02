@@ -7,19 +7,6 @@ const request = require("supertest");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe("/api", () => {
-  describe("GET", () => {
-    test("status:200 and responds with message 'Connected to server'", () => {
-      return request(app)
-        .get("/api")
-        .expect(200)
-        .then((res) => {
-          expect(res.body.message).toBe("Connected to server");
-        });
-    });
-  });
-});
-
 describe("/api/topics", () => {
   describe("GET", () => {
     test("status:200 and responds with array of valid topics", () => {
@@ -123,6 +110,10 @@ describe("/api/articles/:article_id", () => {
     });
   });
 });
+
+// describe("/api/articles", () => {
+//   describe();
+// });
 
 describe("/api/wrongpath", () => {
   describe("GET", () => {

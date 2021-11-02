@@ -1,15 +1,9 @@
 const {
-  selectArticles,
+  selectAllArticles,
   selectSingleArticle,
   countArticleComments,
   updateSingleArticle,
 } = require("../models/articles-model.js");
-
-exports.getArticles = (req, res) => {
-  selectArticles().then((articles) => {
-    res.status(200).send({ articles });
-  });
-};
 
 exports.getSingleArticle = (req, res, next) => {
   selectSingleArticle(req.params.article_id).then((article) => {
@@ -49,4 +43,10 @@ exports.patchSingleArticle = (req, res, next) => {
       }
     );
   }
+};
+
+exports.getAllArticles = (req, res) => {
+  selectAllArticles().then((articles) => {
+    res.status(200).send({ articles });
+  });
 };
