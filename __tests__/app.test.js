@@ -113,7 +113,7 @@ describe("/api/articles/:article_id", () => {
 
 describe("/api/articles", () => {
   describe("GET", () => {
-    test("status:200 and responds with array of articles, with default sorting and no topic filtering", () => {
+    test.only("status:200 and responds with array of articles, with default sorting and no topic filtering", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)
@@ -126,7 +126,7 @@ describe("/api/articles", () => {
             topic: "mitch",
             author: "icellusedkars",
             created_at: "2020-11-03T09:12:00.000Z",
-            comment_count: 3,
+            comment_count: 2,
           });
           expect(res.body.articles[1]).toEqual({
             article_id: 6,

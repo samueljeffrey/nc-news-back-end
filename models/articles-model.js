@@ -44,7 +44,6 @@ exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
   let articlesQuery = "SELECT * FROM articles";
   if (topic) articlesQuery += ` WHERE topic = '${topic}'`;
   articlesQuery += ` ORDER BY ${sort_by} ${order};`;
-  // console.log(articlesQuery);
   return db.query(articlesQuery).then((response) => {
     return response.rows;
   });

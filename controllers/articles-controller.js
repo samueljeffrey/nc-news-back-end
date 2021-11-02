@@ -47,8 +47,20 @@ exports.patchSingleArticle = (req, res, next) => {
 
 exports.getAllArticles = (req, res) => {
   const { sort_by, order, topic } = req.query;
-  selectAllArticles(sort_by, order, topic).then((articles) => {
-    console.log(articles[0], articles[1], articles[2]);
-    res.status(200).send({ articles });
-  });
+  selectAllArticles(sort_by, order, topic)
+    .then((articles) => {
+      return articles.forEach((article) => {
+        return countArticleComments(article.article_id).then((number) => {
+          article.comment_count = number;
+          return article;
+        });
+      });
+    })
+    .then((result) => {
+      console.log(result);
+    });
+
+  // .then((articles) => {
+  //   res.status(200).send({ articles });
+  // });
 };
