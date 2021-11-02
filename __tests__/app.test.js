@@ -65,6 +65,63 @@ describe("/api/articles/:article_id", () => {
         });
     });
   });
+
+  describe("PATCH", () => {
+    test("status:201 and responds with chosen article including increased votes count", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: 5 })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.article).toEqual({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 105,
+            comment_count: 11,
+          });
+        });
+    });
+    test("status:201 and responds with chosen article including descreased votes count", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes: -5 })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.article).toEqual({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 95,
+            comment_count: 11,
+          });
+        });
+    });
+    test("status:400 and responds with error message if article_id is invalid", () => {
+      return request(app)
+        .patch("/api/articles/1000")
+        .send({ inc_votes: 5 })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Incorrect article id");
+        });
+    });
+    test("status:400 and responds with error message if request body object is incorrectly formed", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ anotherVote: 5, inc_votes: "5" })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid input");
+        });
+    });
+  });
 });
 
 describe("/api/wrongpath", () => {

@@ -2,6 +2,7 @@ const {
   selectArticles,
   selectSingleArticle,
   countArticleComments,
+  updateSingleArticle,
 } = require("../models/articles-model.js");
 
 exports.getArticles = (req, res) => {
@@ -15,7 +16,7 @@ exports.getSingleArticle = (req, res, next) => {
     if (article) {
       countArticleComments(article.article_id)
         .then((comments) => {
-          article.comment_count = comments.length;
+          article.comment_count = comments;
           return article;
         })
         .then((article) => {
@@ -27,6 +28,25 @@ exports.getSingleArticle = (req, res, next) => {
   });
 };
 
-exports.patchSingleArticle = (req, res) => {
-  res.status(500).send("hello");
+exports.patchSingleArticle = (req, res, next) => {
+  if (typeof req.body.inc_votes !== "number") {
+    res.status(400).send({ message: "Invalid input" });
+  } else {
+    updateSingleArticle(req.params.article_id, req.body.inc_votes).then(
+      (article) => {
+        if (article) {
+          countArticleComments(article.article_id)
+            .then((comments) => {
+              article.comment_count = comments;
+              return article;
+            })
+            .then((article) => {
+              res.status(201).send({ article });
+            });
+        } else {
+          next();
+        }
+      }
+    );
+  }
 };
