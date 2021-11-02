@@ -9,8 +9,12 @@ exports.getArticles = (req, res) => {
   });
 };
 
-exports.getSingleArticle = (req, res) => {
+exports.getSingleArticle = (req, res, next) => {
   selectSingleArticle(req.params.article_id).then((article) => {
-    res.status(200).send({ article });
+    if (article.length) {
+      res.status(200).send({ article });
+    } else {
+      next();
+    }
   });
 };

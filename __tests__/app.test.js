@@ -56,7 +56,16 @@ describe("/api/articles/:article_id", () => {
           });
         });
     });
+    test("status:400 and responds with error message if article_id is invalid", () => {
+      return request(app)
+        .get("/api/articles/1000")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Incorrect article id");
+        });
+    });
   });
+
   describe("PATCH", () => {
     //
   });

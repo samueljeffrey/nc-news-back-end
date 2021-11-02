@@ -1,5 +1,3 @@
-const db = require("../index.js");
-
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
   const {
@@ -10,6 +8,7 @@ const seed = (data) => {
     insertArticleData,
     insertCommentData,
   } = require("../functions/functions.js");
+
   return dropTables()
     .then(() => {
       return createTables();
