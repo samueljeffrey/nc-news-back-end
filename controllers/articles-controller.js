@@ -56,11 +56,7 @@ exports.getAllArticles = (req, res) => {
         });
       });
     })
-    .then((result) => {
-      console.log(result);
+    .then((articles) => {
+      res.status(200).send({ articles });
     });
-
-  // .then((articles) => {
-  //   res.status(200).send({ articles });
-  // });
 };
