@@ -2,7 +2,6 @@ const {
   selectAllArticles,
   selectSingleArticle,
   selectCommentsSingleArticle,
-  selectCommentsAllArticles,
   updateSingleArticle,
 } = require("../models/articles-model.js");
 
@@ -50,6 +49,9 @@ exports.getAllArticles = (req, res) => {
   const { sort_by, order, topic } = req.query;
   selectAllArticles(sort_by, order, topic).then((articles) => {
     if (articles) {
+      for (let i = 0; i < articles.length; i++) {
+        articles[i].comment_count = parseFloat(articles[i].comment_count);
+      }
       res.status(200).send({ articles });
     } else {
       next();

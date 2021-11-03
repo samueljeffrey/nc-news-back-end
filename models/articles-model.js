@@ -29,13 +29,19 @@ exports.updateSingleArticle = (id, newVotes) => {
 };
 
 exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
-  let articlesQuery = "SELECT * FROM articles";
-  if (topic) articlesQuery += ` WHERE topic = '${topic}'`;
-  articlesQuery += ` ORDER BY ${sort_by} ${order};`;
+  console.log("in selectAllArticles", sort_by, order, topic);
+  let articlesQuery =
+    "SELECT articles.*, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id";
+  if (topic) articlesQuery += ` WHERE articles.topic = '${topic}'`;
+  articlesQuery += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`;
   return db.query(articlesQuery).then((response) => {
+    console.log(response);
     return response.rows;
   });
 };
+
+// ^^^
+// SELECT * FROM articles.*, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id GROUP BY games.game_id
 
 exports.selectCommentsSingleArticle = (id) => {
   return db
@@ -45,5 +51,3 @@ exports.selectCommentsSingleArticle = (id) => {
       else return [];
     });
 };
-
-exports.selectCommentsAllArticles = (array) => {};
