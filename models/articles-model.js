@@ -8,18 +8,6 @@ exports.selectSingleArticle = (id) => {
     });
 };
 
-exports.countArticleComments = (id) => {
-  return db
-    .query(`SELECT * FROM comments WHERE article_id = $1`, [id])
-    .then((response) => {
-      if (response.rows && response.rows.length) {
-        return response.rows.length;
-      } else {
-        return 0;
-      }
-    });
-};
-
 exports.updateSingleArticle = (id, newVotes) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, [id])
@@ -48,3 +36,14 @@ exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
     return response.rows;
   });
 };
+
+exports.selectCommentsSingleArticle = (id) => {
+  return db
+    .query(`SELECT * FROM comments WHERE article_id = $1`, [id])
+    .then((response) => {
+      if (response.rows) return response.rows;
+      else return [];
+    });
+};
+
+exports.selectCommentsAllArticles = (array) => {};

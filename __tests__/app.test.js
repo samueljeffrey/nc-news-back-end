@@ -113,7 +113,7 @@ describe("/api/articles/:article_id", () => {
 
 describe("/api/articles", () => {
   describe("GET", () => {
-    test.only("status:200 and responds with array of articles, with default sorting and no topic filtering", () => {
+    test("status:200 and responds with array of articles, with default sorting and no topic filtering", () => {
       return request(app)
         .get("/api/articles")
         .expect(200)

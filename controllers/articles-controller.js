@@ -1,16 +1,17 @@
 const {
   selectAllArticles,
   selectSingleArticle,
-  countArticleComments,
+  selectCommentsSingleArticle,
+  selectCommentsAllArticles,
   updateSingleArticle,
 } = require("../models/articles-model.js");
 
 exports.getSingleArticle = (req, res, next) => {
   selectSingleArticle(req.params.article_id).then((article) => {
     if (article) {
-      countArticleComments(article.article_id)
+      selectCommentsSingleArticle(article.article_id)
         .then((comments) => {
-          article.comment_count = comments;
+          article.comment_count = comments.length;
           return article;
         })
         .then((article) => {
@@ -29,9 +30,9 @@ exports.patchSingleArticle = (req, res, next) => {
     updateSingleArticle(req.params.article_id, req.body.inc_votes).then(
       (article) => {
         if (article) {
-          countArticleComments(article.article_id)
+          selectCommentsSingleArticle(article.article_id)
             .then((comments) => {
-              article.comment_count = comments;
+              article.comment_count = comments.length;
               return article;
             })
             .then((article) => {
@@ -47,16 +48,11 @@ exports.patchSingleArticle = (req, res, next) => {
 
 exports.getAllArticles = (req, res) => {
   const { sort_by, order, topic } = req.query;
-  selectAllArticles(sort_by, order, topic)
-    .then((articles) => {
-      return articles.forEach((article) => {
-        return countArticleComments(article.article_id).then((number) => {
-          article.comment_count = number;
-          return article;
-        });
-      });
-    })
-    .then((articles) => {
+  selectAllArticles(sort_by, order, topic).then((articles) => {
+    if (articles) {
       res.status(200).send({ articles });
-    });
+    } else {
+      next();
+    }
+  });
 };
