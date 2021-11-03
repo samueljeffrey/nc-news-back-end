@@ -366,5 +366,13 @@ describe("*wrong paths*", () => {
           expect(res.body.message).toBe("Path not found");
         });
     });
+    test("/api/topics/wrongpath", () => {
+      return request(app)
+        .get("/api/topics/wrongpath")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toBe("Path not found");
+        });
+    });
   });
 });
