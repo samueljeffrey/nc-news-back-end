@@ -214,6 +214,14 @@ describe("/api/articles", () => {
           expect(res.body.message).toEqual("No applicable articles");
         });
     });
+    test("status:400 and responds with error message if any given query is invalid", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch&sort_by=wrongoption&order=ASC")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid query in request");
+        });
+    });
   });
 });
 

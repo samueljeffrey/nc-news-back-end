@@ -1,9 +1,9 @@
 const articlesRouter = require("express").Router();
 const { handleUrlErrors, articleIdError } = require("../errors/errors.js");
 const {
-  getAllArticles,
   getSingleArticle,
   patchSingleArticle,
+  getAllArticles,
 } = require("../controllers/articles-controller.js");
 
 articlesRouter

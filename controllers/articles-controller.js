@@ -58,7 +58,7 @@ exports.getAllArticles = (req, res, next) => {
         res.status(200).send({ articles });
       }
     } else {
-      next();
+      res.status(400).send({ message: "Invalid query in request" });
     }
   });
 };
