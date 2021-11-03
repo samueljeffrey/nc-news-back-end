@@ -82,18 +82,13 @@ exports.getArticleComments = (req, res, next) => {
 };
 
 exports.postArticleComment = (req, res, next) => {
-  if (
-    typeof req.body.body === "string" &&
-    typeof req.body.username === "string"
-  ) {
-    insertArticleComment(req.params.article_id, req.body).then((comment) => {
-      if (comment) {
-        res.status(201).send({ comment });
-      } else {
-        next();
-      }
-    });
-  } else {
-    res.status(400).send({ message: "Invalid request body" });
-  }
+  insertArticleComment(req.params.article_id, req.body).then((comment) => {
+    if (!comment.code) {
+      res.status(201).send({ comment });
+    } else if (comment.code === "22P02") {
+      next();
+    } else {
+      res.status(400).send({ message: "Malformed request body" });
+    }
+  });
 };

@@ -297,18 +297,30 @@ describe("/api/articles/:article_id/comments", () => {
           expect(res.body.message).toEqual("Invalid article id");
         });
     });
-    // test("status:400 and responds with custom error message if ", () => {
-    //   return request(app)
-    //     .post("/api/articles/eight/comments")
-    //     .send({
-    //       username: "rogersop",
-    //       body: "Great article, very interesting indeed",
-    //     })
-    //     .expect(400)
-    //     .then((res) => {
-    //       expect(res.body.message).toEqual("Invalid article id");
-    //     });
-    // });
+    test("status:400 and responds with custom error message if request body is missing necessary keys", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          person: "rogersop",
+          writes: "Great article, very interesting indeed",
+        })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Malformed request body");
+        });
+    });
+    test("status:400 and responds with custom error message if request any value on request body is incompatible with database", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          username: 12345,
+          body: 12345,
+        })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Malformed request body");
+        });
+    });
   });
 });
 

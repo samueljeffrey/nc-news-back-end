@@ -64,7 +64,7 @@ exports.insertArticleComment = (id, body) => {
     .then((response) => {
       return response.rows[0];
     })
-    .catch(() => {
-      return undefined;
+    .catch((err) => {
+      return err;
     });
 };
