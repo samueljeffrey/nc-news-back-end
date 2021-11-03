@@ -329,12 +329,20 @@ describe("/api/comments/:comment_id", () => {
     test("status:204 and respond with confirmation message if the comment was found and deleted", () => {
       return request(app).delete("/api/comments/3").expect(204);
     });
-    test("status:400 and respond with error message if comment_id is invalid", () => {
+    test("status:400 and respond with error message if comment_id is not a number", () => {
+      return request(app)
+        .delete("/api/comments/three")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid comment id");
+        });
+    });
+    test("status:400 and respond with error message if comment_id is a number but comment doesn't exist", () => {
       return request(app)
         .delete("/api/comments/103")
         .expect(400)
         .then((res) => {
-          expect(res.body.message).toEqual("Invalid comment id");
+          expect(res.body.message).toEqual("Comment was not found");
         });
     });
   });
