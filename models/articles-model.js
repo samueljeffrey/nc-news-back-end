@@ -38,7 +38,7 @@ exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
     .then((response) => {
       return response.rows;
     })
-    .catch((err) => {
+    .catch(() => {
       return undefined;
     });
 };
@@ -49,5 +49,10 @@ exports.selectCommentsSingleArticle = (id) => {
     .then((response) => {
       if (response.rows) return response.rows;
       else return [];
+    })
+    .catch(() => {
+      return undefined;
     });
 };
+
+// exports.insertArticleComment;

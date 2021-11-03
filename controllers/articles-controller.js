@@ -3,6 +3,7 @@ const {
   selectSingleArticle,
   selectCommentsSingleArticle,
   updateSingleArticle,
+  // insertArticleComment,
 } = require("../models/articles-model.js");
 
 exports.getSingleArticle = (req, res, next) => {
@@ -63,8 +64,23 @@ exports.getAllArticles = (req, res, next) => {
   });
 };
 
-exports.getArticleComments = (req, res) => {
+exports.getArticleComments = (req, res, next) => {
   selectCommentsSingleArticle(req.params.article_id).then((comments) => {
-    console.log(comments);
+    if (comments) {
+      if (comments.length === 0) {
+        res.status(200).send({ message: "No comments" });
+      } else {
+        for (let i = 0; i < comments.length; i++) {
+          delete comments[i].article_id;
+        }
+        res.status(200).send({ comments });
+      }
+    } else {
+      next();
+    }
   });
 };
+
+// exports.postArticleComment = (req, res) => {
+//   insertArticleComment();
+// };

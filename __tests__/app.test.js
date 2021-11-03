@@ -48,7 +48,7 @@ describe("/api/articles/:article_id", () => {
         .get("/api/articles/1000")
         .expect(400)
         .then((res) => {
-          expect(res.body.message).toEqual("Incorrect article id");
+          expect(res.body.message).toEqual("Invalid article id");
         });
     });
   });
@@ -96,7 +96,7 @@ describe("/api/articles/:article_id", () => {
         .send({ inc_votes: 5 })
         .expect(400)
         .then((res) => {
-          expect(res.body.message).toEqual("Incorrect article id");
+          expect(res.body.message).toEqual("Invalid article id");
         });
     });
     test("status:400 and responds with error message if request body object is incorrectly formed", () => {
@@ -225,11 +225,49 @@ describe("/api/articles", () => {
   });
 });
 
-// describe("/api/:article_id/comments", ()=>{
-//   describe("GET", ()=>{
-//     test("")
-//   })
-// })
+describe("/api/articles/:article_id/comments", () => {
+  describe("GET", () => {
+    test("status:200 and responds with an array of comments posted on the given article", () => {
+      return request(app)
+        .get("/api/articles/5/comments")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comments).toEqual([
+            {
+              body: "What do you see? I have no idea where this will lead us. This place I speak of, is known as the Black Lodge.",
+              votes: 16,
+              author: "icellusedkars",
+              comment_id: 14,
+              created_at: new Date(1591682400000).toISOString(),
+            },
+            {
+              body: "I am 100% sure that we're not completely sure.",
+              votes: 1,
+              author: "butter_bridge",
+              comment_id: 15,
+              created_at: new Date(1606176480000).toISOString(),
+            },
+          ]);
+        });
+    });
+    test("status:200 and responds with a custom message if given article has no comments", () => {
+      return request(app)
+        .get("/api/articles/8/comments")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.message).toEqual("No comments");
+        });
+    });
+    test("status:400 and responds with error message if article_id is invalid", () => {
+      return request(app)
+        .get("/api/articles/five/comments")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid article id");
+        });
+    });
+  });
+});
 
 describe("/api/wrongpath", () => {
   describe("GET", () => {

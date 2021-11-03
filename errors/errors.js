@@ -3,5 +3,5 @@ exports.handleUrlErrors = (req, res) => {
 };
 
 exports.articleIdError = (req, res) => {
-  res.status(400).send({ message: "Incorrect article id" });
+  res.status(400).send({ message: "Invalid article id" });
 };
