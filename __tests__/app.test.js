@@ -324,24 +324,35 @@ describe("/api/articles/:article_id/comments", () => {
   });
 });
 
-describe("/api/wrongpath", () => {
-  describe("GET", () => {
-    test("status:404 and responds with message 'Path not found'", () => {
+describe("/api/comments/:comment_id", () => {
+  describe("DELETE", () => {
+    test("status:204 and respond with confirmation message if the comment was found and deleted", () => {
+      return request(app).delete("/api/comments/3").expect(204);
+    });
+    test("status:400 and respond with error message if comment_id is invalid", () => {
       return request(app)
-        .get("/api/wrongpath")
-        .expect(404)
+        .delete("/api/comments/103")
+        .expect(400)
         .then((res) => {
-          expect(res.body.message).toBe("Path not found");
+          expect(res.body.message).toEqual("Invalid comment id");
         });
     });
   });
 });
 
-describe("/wrongpath", () => {
-  describe("GET", () => {
-    test("status:404 and responds with object, with message key", () => {
+describe("*wrong paths*", () => {
+  describe("status:404 and responds with message 'Path not found'", () => {
+    test("/wrongpath", () => {
       return request(app)
         .get("/wrongpath")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toBe("Path not found");
+        });
+    });
+    test("/api/wrongpath", () => {
+      return request(app)
+        .get("/api/wrongpath")
         .expect(404)
         .then((res) => {
           expect(res.body.message).toBe("Path not found");

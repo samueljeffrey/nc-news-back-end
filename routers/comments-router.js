@@ -1,8 +1,9 @@
 const commentsRouter = require("express").Router();
-const { handleUrlErrors } = require("../errors/errors.js");
-const { getComments } = require("../controllers/comments-controller.js");
+const { handleUrlErrors, commentIdError } = require("../errors/errors.js");
+const { deleteComment } = require("../controllers/comments-controller.js");
 
-commentsRouter.route("/").get(getComments);
+commentsRouter.route("/:comment_id").delete(deleteComment);
+commentsRouter.use("/*", commentIdError);
 
 commentsRouter.use("*", handleUrlErrors);
 
