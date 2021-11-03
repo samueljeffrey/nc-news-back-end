@@ -267,6 +267,49 @@ describe("/api/articles/:article_id/comments", () => {
         });
     });
   });
+  describe("POST", () => {
+    test("status:201 and responds with newly posted comment if article_id and body of request are valid", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          username: "rogersop",
+          body: "Great article, very interesting indeed",
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.comment.body).toEqual(
+            "Great article, very interesting indeed"
+          );
+          expect(res.body.comment.votes).toEqual(0);
+          expect(res.body.comment.comment_id).toEqual(19);
+          expect(res.body.comment.author).toEqual("rogersop");
+        });
+    });
+    test("status:400 and responds with error message if article_id is invalid", () => {
+      return request(app)
+        .post("/api/articles/eight/comments")
+        .send({
+          username: "rogersop",
+          body: "Great article, very interesting indeed",
+        })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid article id");
+        });
+    });
+    // test("status:400 and responds with custom error message if ", () => {
+    //   return request(app)
+    //     .post("/api/articles/eight/comments")
+    //     .send({
+    //       username: "rogersop",
+    //       body: "Great article, very interesting indeed",
+    //     })
+    //     .expect(400)
+    //     .then((res) => {
+    //       expect(res.body.message).toEqual("Invalid article id");
+    //     });
+    // });
+  });
 });
 
 describe("/api/wrongpath", () => {

@@ -3,7 +3,7 @@ const {
   selectSingleArticle,
   selectCommentsSingleArticle,
   updateSingleArticle,
-  // insertArticleComment,
+  insertArticleComment,
 } = require("../models/articles-model.js");
 
 exports.getSingleArticle = (req, res, next) => {
@@ -81,6 +81,19 @@ exports.getArticleComments = (req, res, next) => {
   });
 };
 
-// exports.postArticleComment = (req, res) => {
-//   insertArticleComment();
-// };
+exports.postArticleComment = (req, res, next) => {
+  if (
+    typeof req.body.body === "string" &&
+    typeof req.body.username === "string"
+  ) {
+    insertArticleComment(req.params.article_id, req.body).then((comment) => {
+      if (comment) {
+        res.status(201).send({ comment });
+      } else {
+        next();
+      }
+    });
+  } else {
+    res.status(400).send({ message: "Invalid request body" });
+  }
+};

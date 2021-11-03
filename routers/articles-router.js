@@ -5,11 +5,13 @@ const {
   patchSingleArticle,
   getAllArticles,
   getArticleComments,
-  // postArticleComment,
+  postArticleComment,
 } = require("../controllers/articles-controller.js");
 
-articlesRouter.route("/:article_id/comments").get(getArticleComments);
-// .post(postArticleComment);
+articlesRouter
+  .route("/:article_id/comments")
+  .get(getArticleComments)
+  .post(postArticleComment);
 
 articlesRouter
   .route("/:article_id")

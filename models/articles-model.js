@@ -55,4 +55,16 @@ exports.selectCommentsSingleArticle = (id) => {
     });
 };
 
-// exports.insertArticleComment;
+exports.insertArticleComment = (id, body) => {
+  return db
+    .query(
+      `INSERT INTO comments (article_id, author, body) VALUES($1, $2, $3) RETURNING *;`,
+      [id, body.username, body.body]
+    )
+    .then((response) => {
+      return response.rows[0];
+    })
+    .catch(() => {
+      return undefined;
+    });
+};
