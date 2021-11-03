@@ -45,16 +45,26 @@ exports.patchSingleArticle = (req, res, next) => {
   }
 };
 
-exports.getAllArticles = (req, res) => {
+exports.getAllArticles = (req, res, next) => {
   const { sort_by, order, topic } = req.query;
   selectAllArticles(sort_by, order, topic).then((articles) => {
     if (articles) {
-      for (let i = 0; i < articles.length; i++) {
-        articles[i].comment_count = parseFloat(articles[i].comment_count);
+      if (articles.length === 0) {
+        res.status(200).send({ message: "No applicable articles" });
+      } else {
+        for (let i = 0; i < articles.length; i++) {
+          articles[i].comment_count = parseFloat(articles[i].comment_count);
+        }
+        res.status(200).send({ articles });
       }
-      res.status(200).send({ articles });
     } else {
       next();
     }
+  });
+};
+
+exports.getArticleComments = (req, res) => {
+  selectCommentsSingleArticle(req.params.article_id).then((comments) => {
+    console.log(comments);
   });
 };

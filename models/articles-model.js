@@ -34,7 +34,11 @@ exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
   if (topic) articlesQuery += ` WHERE articles.topic = '${topic}'`;
   articlesQuery += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`;
   return db.query(articlesQuery).then((response) => {
-    return response.rows;
+    if (response.hasOwnProperty("rows")) {
+      return response.rows;
+    } else {
+      return undefined;
+    }
   });
 };
 

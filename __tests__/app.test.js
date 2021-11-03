@@ -206,8 +206,22 @@ describe("/api/articles", () => {
           });
         });
     });
+    test("status:200 and responds with custom message if no articles fit the query specifications", () => {
+      return request(app)
+        .get("/api/articles?topic=paper&sort_by=title&order=ASC")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.message).toEqual("No applicable articles");
+        });
+    });
   });
 });
+
+// describe("/api/:article_id/comments", ()=>{
+//   describe("GET", ()=>{
+//     test("")
+//   })
+// })
 
 describe("/api/wrongpath", () => {
   describe("GET", () => {
