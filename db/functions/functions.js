@@ -38,7 +38,7 @@ const createTables = () => {
     votes INT DEFAULT 0,
     topic VARCHAR(255) REFERENCES topics(slug),
     author VARCHAR(20) REFERENCES users(username),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
   );`);
     })
     .then(() => {
@@ -47,7 +47,7 @@ const createTables = () => {
     author VARCHAR(20) REFERENCES users(username),
     article_id INT REFERENCES articles(article_id),
     votes INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     body VARCHAR(1000) NOT NULL
   );`);
     });

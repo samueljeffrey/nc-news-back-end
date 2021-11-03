@@ -37,7 +37,7 @@ describe("/api/articles/:article_id", () => {
             topic: "mitch",
             author: "butter_bridge",
             body: "I find this existence challenging",
-            created_at: "2020-07-09T20:11:00.000Z",
+            created_at: new Date(1594329060000).toISOString(),
             votes: 100,
             comment_count: 11,
           });
@@ -66,7 +66,7 @@ describe("/api/articles/:article_id", () => {
             topic: "mitch",
             author: "butter_bridge",
             body: "I find this existence challenging",
-            created_at: "2020-07-09T20:11:00.000Z",
+            created_at: new Date(1594329060000).toISOString(),
             votes: 105,
             comment_count: 11,
           });
@@ -84,7 +84,7 @@ describe("/api/articles/:article_id", () => {
             topic: "mitch",
             author: "butter_bridge",
             body: "I find this existence challenging",
-            created_at: "2020-07-09T20:11:00.000Z",
+            created_at: new Date(1594329060000).toISOString(),
             votes: 95,
             comment_count: 11,
           });
@@ -125,7 +125,7 @@ describe("/api/articles", () => {
             votes: 0,
             topic: "mitch",
             author: "icellusedkars",
-            created_at: "2020-11-03T09:12:00.000Z",
+            created_at: new Date(1604394720000).toISOString(),
             comment_count: 2,
           });
           expect(res.body.articles[1]).toEqual({
@@ -135,7 +135,7 @@ describe("/api/articles", () => {
             votes: 0,
             topic: "mitch",
             author: "icellusedkars",
-            created_at: "2020-10-18T01:00:00.000Z",
+            created_at: new Date(1602986400000).toISOString(),
             comment_count: 1,
           });
           expect(res.body.articles[2]).toEqual({
@@ -145,7 +145,7 @@ describe("/api/articles", () => {
             votes: 0,
             topic: "mitch",
             author: "icellusedkars",
-            created_at: "2020-10-16T05:03:00.000Z",
+            created_at: new Date(1602828180000).toISOString(),
             comment_count: 0,
           });
         });
@@ -163,7 +163,7 @@ describe("/api/articles", () => {
               votes: 0,
               topic: "cats",
               author: "rogersop",
-              created_at: "2020-08-03T13:14:00.000Z",
+              created_at: new Date(1596464040000).toISOString(),
               comment_count: 2,
             },
           ]);
@@ -181,7 +181,7 @@ describe("/api/articles", () => {
             votes: 0,
             topic: "mitch",
             author: "icellusedkars",
-            created_at: "2020-10-18T01:00:00.000Z",
+            created_at: new Date(1602986400000).toISOString(),
             comment_count: 1,
           });
           expect(res.body.articles[1]).toEqual({
@@ -191,7 +191,7 @@ describe("/api/articles", () => {
             votes: 0,
             topic: "mitch",
             author: "icellusedkars",
-            created_at: "2020-01-15T22:21:00.000Z",
+            created_at: new Date(1579126860000).toISOString(),
             comment_count: 0,
           });
           expect(res.body.articles[2]).toEqual({
@@ -201,7 +201,7 @@ describe("/api/articles", () => {
             votes: 0,
             topic: "mitch",
             author: "icellusedkars",
-            created_at: "2020-04-17T01:08:00.000Z",
+            created_at: new Date(1587089280000).toISOString(),
             comment_count: 0,
           });
         });
