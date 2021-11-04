@@ -348,6 +348,27 @@ describe("/api/comments/:comment_id", () => {
   });
 });
 
+describe("/api", () => {
+  describe("GET", () => {
+    test("returns an object detailing the available endpoints of the api and their purposes", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then((res) => {
+          expect(typeof res.body.data).toEqual("object");
+          expect(Object.keys(res.body.data)).toEqual([
+            "/api/topics",
+            "/api/articles/:article_id",
+            "/api/articles",
+            "/api/articles/:article_id/comments",
+            "/api/comments/:comment_id",
+            "/api",
+          ]);
+        });
+    });
+  });
+});
+
 describe("*wrong paths*", () => {
   describe("status:404 and responds with message 'Path not found'", () => {
     test("/wrongpath", () => {
