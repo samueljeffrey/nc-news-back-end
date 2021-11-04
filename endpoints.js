@@ -282,7 +282,7 @@ const data = {
           GET: {
             description:
               "returns this very json object, detailing what you can expect from requests to all of the available endpoints",
-            example: "(inception)"
+            example: "that's right, inception"
           },
         },
       };
