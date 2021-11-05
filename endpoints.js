@@ -156,6 +156,7 @@ const data = {
         name: "sam",
         avatar_url: "www.someurl.com",
       },
+      parameter: "placeholder :username in path must be filled by a number",
     },
   },
   "/api": {
