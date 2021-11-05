@@ -136,6 +136,28 @@ const data = {
       parameter: "placeholder :comment_id in path must be filled by a number",
     },
   },
+  "/api/users": {
+    GET: {
+      description:
+        "returns an array of user objects, each containing only a username property",
+      "output example": [
+        { username: "sam1" },
+        { username: "sam2" },
+        { username: "sam3" },
+      ],
+    },
+  },
+  "/api/users/:username": {
+    GET: {
+      description:
+        "returns a single user object, if found, which contains the properties 'username', 'name', and 'avatar_url'",
+      "output example": {
+        username: "sam4",
+        name: "sam",
+        avatar_url: "www.someurl.com",
+      },
+    },
+  },
   "/api": {
     GET: {
       description:
