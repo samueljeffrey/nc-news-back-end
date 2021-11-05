@@ -369,6 +369,24 @@ describe("/api", () => {
   });
 });
 
+describe("/api/users", () => {
+  describe("GET", () => {
+    test("status:200 and returns an array of objects, each with the sole key 'username'", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then((res) => {
+          expect(typeof res.body.users).toEqual("object");
+          expect(res.body.users.length).not.toBe(undefined);
+          res.body.users.forEach((user) => {
+            expect(Object.keys(user)).toEqual(["username"]);
+            expect(typeof user.username).toEqual("string");
+          });
+        });
+    });
+  });
+});
+
 describe("*wrong paths*", () => {
   describe("status:404 and responds with message 'Path not found'", () => {
     test("/wrongpath", () => {
