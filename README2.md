@@ -81,7 +81,25 @@ Your .env files are now ready to function correctly.
 
 ---
 
-### 4. Try the tests
+### 4. Set up the databases
+
+To test the API, we first need it to access databases, which are currently non-existent. We need to create the required databases - a test database and a development database, the name's of which we specific in our .env files earlier. Run the following command:
+
+```http
+npm run setup-dbs
+```
+
+This command relates to a "script" which already exists in our package.json file, which tells another of our files, setup.sql, to run. Our test and development databases have now been created. They must be filled with data from our data files, which currently just consists of javascript objects. The filling of the database is called "seeding", and requires the following command to be run:
+
+```http
+npm run seed
+```
+
+During our tests, we don't need to keep "re-seeding", as the test file is already set up to do this for us before each and every test is run.
+
+---
+
+### 5. Try the tests
 
 In order to test the functionality of the API at it's various endpoints, there are some jest tests in the file app.test.js. These tests simulate requests to the api using express and postgreSQL, which you have installed as dependencies. You may read through the app.test.js file in detail, or to simply check that the tests pass, run the following command, once again in your code editor's terminal:
 
