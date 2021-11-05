@@ -1,4 +1,4 @@
-const { selectUsers } = require("../models/users-model.js");
+const { selectUsers, selectSingleUser } = require("../models/users-model.js");
 
 exports.getUsers = (req, res) => {
   selectUsers().then((users) => {
@@ -7,5 +7,11 @@ exports.getUsers = (req, res) => {
       delete user.avatar_url;
     });
     res.status(200).send({ users });
+  });
+};
+
+exports.getSingleUser = (req, res, next) => {
+  selectSingleUser(req.params.username).then((user) => {
+    res.status(200).send({ user });
   });
 };

@@ -387,6 +387,24 @@ describe("/api/users", () => {
   });
 });
 
+describe("/api/users/:username", () => {
+  describe("GET", () => {
+    test("status:200 and responds with a single user's details, if the given user exists", () => {
+      return request(app)
+        .get("/api/users/rogersop")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.user).toEqual({
+            username: "rogersop",
+            avatar_url:
+              "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+            name: "paul",
+          });
+        });
+    });
+  });
+});
+
 describe("*wrong paths*", () => {
   describe("status:404 and responds with message 'Path not found'", () => {
     test("/wrongpath", () => {

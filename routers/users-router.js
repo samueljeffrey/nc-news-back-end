@@ -1,7 +1,11 @@
 const usersRouter = require("express").Router();
 const { handleUrlErrors } = require("../errors/errors.js");
-const { getUsers } = require("../controllers/users-controller.js");
+const {
+  getUsers,
+  getSingleUser,
+} = require("../controllers/users-controller.js");
 
+usersRouter.route("/:username").get(getSingleUser);
 usersRouter.route("/").get(getUsers);
 
 usersRouter.use("*", handleUrlErrors);
