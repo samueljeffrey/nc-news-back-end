@@ -362,6 +362,8 @@ describe("/api", () => {
             "/api/articles",
             "/api/articles/:article_id/comments",
             "/api/comments/:comment_id",
+            "/api/users",
+            "/api/users/:username",
             "/api",
           ]);
         });
@@ -400,6 +402,14 @@ describe("/api/users/:username", () => {
               "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
             name: "paul",
           });
+        });
+    });
+    test("status:400 and responds with custom message if username is invalid", () => {
+      return request(app)
+        .get("/api/users/wrongusername")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid username");
         });
     });
   });

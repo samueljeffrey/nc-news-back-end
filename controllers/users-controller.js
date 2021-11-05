@@ -12,6 +12,11 @@ exports.getUsers = (req, res) => {
 
 exports.getSingleUser = (req, res, next) => {
   selectSingleUser(req.params.username).then((user) => {
-    res.status(200).send({ user });
+    console.log(user);
+    if (!user) {
+      res.status(400).send({ message: "Invalid username" });
+    } else {
+      res.status(200).send({ user });
+    }
   });
 };

@@ -11,5 +11,8 @@ exports.selectSingleUser = (username) => {
     .query(`SELECT * FROM users WHERE username = $1`, [username])
     .then((response) => {
       return response.rows[0];
+    })
+    .catch(() => {
+      return undefined;
     });
 };
