@@ -1,4 +1,7 @@
-const { removeComment } = require("../models/comments-model.js");
+const {
+  removeComment,
+  updateSingleComment,
+} = require("../models/comments-model.js");
 
 exports.deleteComment = (req, res, next) => {
   removeComment(req.params.comment_id).then((message) => {
@@ -10,4 +13,19 @@ exports.deleteComment = (req, res, next) => {
       next();
     }
   });
+};
+
+exports.patchSingleComment = (req, res, next) => {
+  updateSingleComment(req.params.comment_id, req.body.inc_votes)
+    .then((comment) => {
+      if (!comment) {
+        res.status(400).send({ message: "Malformed request body" });
+      } else {
+        delete comment.article_id;
+        res.status(200).send({ comment });
+      }
+    })
+    .catch(() => {
+      res.status(400).send({ message: "Invalid comment id" });
+    });
 };
