@@ -318,6 +318,37 @@ describe("/api/articles/:article_id/comments", () => {
           expect(res.body.comment.author).toEqual("rogersop");
         });
     });
+    test("status:201 and responds with newly posted comment, ignoring extra keys in request body", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          username: "rogersop",
+          body: "Great article, very interesting indeed",
+          extra: "extraitem1",
+          another: "extraitem2",
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.comment.body).toEqual(
+            "Great article, very interesting indeed"
+          );
+          expect(res.body.comment.votes).toEqual(0);
+          expect(res.body.comment.comment_id).toEqual(19);
+          expect(res.body.comment.author).toEqual("rogersop");
+        });
+    });
+    test("status:404 and responds with message if article is not found", () => {
+      return request(app)
+        .post("/api/articles/99999/comments")
+        .send({
+          username: "rogersop",
+          body: "Great article, very interesting indeed",
+        })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Article not found");
+        });
+    });
     test("status:400 and responds with error message if article_id is invalid", () => {
       return request(app)
         .post("/api/articles/eight/comments")
@@ -340,6 +371,18 @@ describe("/api/articles/:article_id/comments", () => {
         .expect(400)
         .then((res) => {
           expect(res.body.message).toEqual("Malformed request body");
+        });
+    });
+    test("status:404 and responds with error message if username is not found", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          username: "wrongusername",
+          body: "12345",
+        })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Username not found");
         });
     });
     test("status:400 and responds with custom error message if request any value on request body is incompatible with database", () => {

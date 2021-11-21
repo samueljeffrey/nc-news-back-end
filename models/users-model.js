@@ -10,9 +10,10 @@ exports.selectSingleUser = (username) => {
   return db
     .query(`SELECT * FROM users WHERE username = $1`, [username])
     .then((response) => {
-      return response.rows[0];
-    })
-    .catch(() => {
-      return undefined;
+      if (typeof username !== "string") {
+        return "Invalid username";
+      } else {
+        return response.rows[0];
+      }
     });
 };

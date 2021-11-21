@@ -6,6 +6,7 @@ const {
   insertArticleComment,
 } = require("../models/articles-model.js");
 const { selectTopics } = require("../models/topics-model.js");
+const { selectSingleUser } = require("../models/users-model.js");
 
 exports.getSingleArticle = (req, res, next) => {
   selectSingleArticle(req.params.article_id)
@@ -107,13 +108,37 @@ exports.getArticleComments = (req, res, next) => {
 };
 
 exports.postArticleComment = (req, res, next) => {
-  insertArticleComment(req.params.article_id, req.body).then((comment) => {
-    if (!comment.code) {
-      res.status(201).send({ comment });
-    } else if (comment.code === "22P02") {
-      next();
-    } else {
-      res.status(400).send({ message: "Malformed request body" });
-    }
-  });
+  selectSingleArticle(req.params.article_id)
+    .then((article) => {
+      if (article === "Article not found") {
+        res.status(404).send({ message: "Article not found" });
+      } else {
+        insertArticleComment(req.params.article_id, req.body)
+          .then((comment) => {
+            if (!comment.code) {
+              res.status(201).send({ comment });
+            } else if (comment.code === "22P02") {
+              next();
+            } else {
+              res.status(400).send({ message: "Malformed request body" });
+            }
+          })
+          .catch((err) => {
+            selectSingleUser(req.body.username).then((user) => {
+              if (user) {
+                res.status(400).send({ message: "Malformed request body" });
+              } else {
+                res.status(404).send({ message: "Username not found" });
+              }
+            });
+          });
+      }
+    })
+    .catch((err) => {
+      if (err.code === "22P02") {
+        next();
+      } else {
+        res.status(400).send({ message: "Malformed request body" });
+      }
+    });
 };
