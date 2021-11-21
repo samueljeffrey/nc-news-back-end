@@ -41,14 +41,9 @@ exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
     "SELECT articles.*, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id";
   if (topic) articlesQuery += ` WHERE articles.topic = '${topic}'`;
   articlesQuery += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`;
-  return db
-    .query(articlesQuery)
-    .then((response) => {
-      return response.rows;
-    })
-    .catch(() => {
-      return undefined;
-    });
+  return db.query(articlesQuery).then((response) => {
+    return response.rows;
+  });
 };
 
 exports.selectCommentsSingleArticle = (id) => {

@@ -223,15 +223,23 @@ describe("/api/articles", () => {
           });
         });
     });
-    test("status:200 and responds with custom message if no articles fit the query specifications", () => {
+    test("status:200 and responds with empty array if no articles exist for that topic", () => {
       return request(app)
         .get("/api/articles?topic=paper&sort_by=title&order=ASC")
         .expect(200)
         .then((res) => {
-          expect(res.body.message).toEqual("No applicable articles");
+          expect(res.body.articles).toEqual([]);
         });
     });
-    test("status:400 and responds with error message if any given query is invalid", () => {
+    test("status:404 and responds with error message if topic is not found", () => {
+      return request(app)
+        .get("/api/articles?topic=wrongoption")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Topic not found");
+        });
+    });
+    test("status:400 and responds with error message if sort or order queries are invalid", () => {
       return request(app)
         .get("/api/articles?topic=mitch&sort_by=wrongoption&order=ASC")
         .expect(400)

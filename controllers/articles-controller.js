@@ -5,6 +5,7 @@ const {
   updateSingleArticle,
   insertArticleComment,
 } = require("../models/articles-model.js");
+const { selectTopics } = require("../models/topics-model.js");
 
 exports.getSingleArticle = (req, res, next) => {
   selectSingleArticle(req.params.article_id)
@@ -54,20 +55,32 @@ exports.patchSingleArticle = (req, res, next) => {
 
 exports.getAllArticles = (req, res, next) => {
   const { sort_by, order, topic } = req.query;
-  selectAllArticles(sort_by, order, topic).then((articles) => {
-    if (articles) {
+  selectAllArticles(sort_by, order, topic)
+    .then((articles) => {
       if (articles.length === 0) {
-        res.status(200).send({ message: "No applicable articles" });
+        selectTopics().then((topics) => {
+          let topicExists = false;
+          for (let i = 0; i < topics.length; i++) {
+            if (topics[i].slug === topic) {
+              topicExists = true;
+            }
+          }
+          if (topicExists) {
+            res.status(200).send({ articles });
+          } else {
+            res.status(404).send({ message: "Topic not found" });
+          }
+        });
       } else {
         for (let i = 0; i < articles.length; i++) {
           articles[i].comment_count = parseFloat(articles[i].comment_count);
         }
         res.status(200).send({ articles });
       }
-    } else {
+    })
+    .catch(() => {
       res.status(400).send({ message: "Invalid query in request" });
-    }
-  });
+    });
 };
 
 exports.getArticleComments = (req, res, next) => {
