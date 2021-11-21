@@ -413,12 +413,12 @@ describe("/api/comments/:comment_id", () => {
           expect(res.body.message).toEqual("Invalid comment id");
         });
     });
-    test("status:400 and respond with error message if comment_id is a number but comment doesn't exist", () => {
+    test("status:404 and respond with error message if comment_id is a number but comment doesn't exist", () => {
       return request(app)
         .delete("/api/comments/103")
-        .expect(400)
+        .expect(404)
         .then((res) => {
-          expect(res.body.message).toEqual("Comment was not found");
+          expect(res.body.message).toEqual("Comment not found");
         });
     });
   });

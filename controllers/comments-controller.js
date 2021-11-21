@@ -7,8 +7,8 @@ exports.deleteComment = (req, res, next) => {
   removeComment(req.params.comment_id).then((message) => {
     if (message === "Comment deleted") {
       res.status(204).send();
-    } else if (message === "Comment was not found") {
-      res.status(400).send({ message });
+    } else if (message === "Comment not found") {
+      res.status(404).send({ message });
     } else {
       next();
     }

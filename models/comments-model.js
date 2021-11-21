@@ -5,7 +5,7 @@ exports.removeComment = (id) => {
     .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *;`, [id])
     .then((response) => {
       if (response.rows.length === 0) {
-        return "Comment was not found";
+        return "Comment not found";
       } else if (response.rows.length) {
         return "Comment deleted";
       }
