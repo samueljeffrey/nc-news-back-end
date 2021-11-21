@@ -20,15 +20,19 @@ exports.updateSingleArticle = (id, newVotes) => {
       return article.rows[0].votes;
     })
     .then((currentVotes) => {
-      if (currentVotes === undefined) return undefined;
+      if (currentVotes === undefined) return "Article not found";
+      if (typeof newVotes !== "number") return "Invalid input";
       return db.query(
         `UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *`,
         [newVotes + currentVotes, id]
       );
     })
     .then((updatedArticle) => {
-      if (updatedArticle === undefined) return undefined;
-      return updatedArticle.rows[0];
+      if (updatedArticle.rows) {
+        return updatedArticle.rows[0];
+      } else {
+        return updatedArticle;
+      }
     });
 };
 

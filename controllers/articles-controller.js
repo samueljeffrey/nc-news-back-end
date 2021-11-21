@@ -28,26 +28,28 @@ exports.getSingleArticle = (req, res, next) => {
 };
 
 exports.patchSingleArticle = (req, res, next) => {
-  if (typeof req.body.inc_votes !== "number") {
-    res.status(400).send({ message: "Invalid input" });
-  } else {
-    updateSingleArticle(req.params.article_id, req.body.inc_votes).then(
-      (article) => {
-        if (article) {
-          selectCommentsSingleArticle(article.article_id)
-            .then((comments) => {
-              article.comment_count = comments.length;
-              return article;
-            })
-            .then((article) => {
-              res.status(201).send({ article });
-            });
-        } else {
-          next();
-        }
+  updateSingleArticle(req.params.article_id, req.body.inc_votes)
+    .then((article) => {
+      if (article === "Article not found") {
+        res.status(404).send({ message: "Article not found" });
+      } else if (article === "Invalid input") {
+        res.status(400).send({ message: "Invalid input" });
+      } else if (article) {
+        selectCommentsSingleArticle(article.article_id)
+          .then((comments) => {
+            article.comment_count = comments.length;
+            return article;
+          })
+          .then((article) => {
+            res.status(201).send({ article });
+          });
+      } else {
+        next();
       }
-    );
-  }
+    })
+    .catch(() => {
+      res.status(400).send({ message: "Invalid article id" });
+    });
 };
 
 exports.getAllArticles = (req, res, next) => {

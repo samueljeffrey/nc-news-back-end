@@ -100,11 +100,20 @@ describe("/api/articles/:article_id", () => {
     });
     test("status:400 and responds with error message if article_id is invalid", () => {
       return request(app)
-        .patch("/api/articles/1000")
+        .patch("/api/articles/notanumber")
         .send({ inc_votes: 5 })
         .expect(400)
         .then((res) => {
           expect(res.body.message).toEqual("Invalid article id");
+        });
+    });
+    test("status:404 and responds with error message if article_id is not found", () => {
+      return request(app)
+        .patch("/api/articles/99999")
+        .send({ inc_votes: 5 })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Article not found");
         });
     });
     test("status:400 and responds with error message if request body object is incorrectly formed", () => {
