@@ -45,10 +45,18 @@ describe("/api/articles/:article_id", () => {
     });
     test("status:400 and responds with error message if article_id is invalid", () => {
       return request(app)
-        .get("/api/articles/1000")
+        .get("/api/articles/notanumber")
         .expect(400)
         .then((res) => {
           expect(res.body.message).toEqual("Invalid article id");
+        });
+    });
+    test("status:404 and responds with error message if article_id is not found", () => {
+      return request(app)
+        .get("/api/articles/99999")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Article not found");
         });
     });
   });

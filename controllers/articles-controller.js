@@ -7,20 +7,24 @@ const {
 } = require("../models/articles-model.js");
 
 exports.getSingleArticle = (req, res, next) => {
-  selectSingleArticle(req.params.article_id).then((article) => {
-    if (article) {
-      selectCommentsSingleArticle(article.article_id)
-        .then((comments) => {
-          article.comment_count = comments.length;
-          return article;
-        })
-        .then((article) => {
-          res.status(200).send({ article });
-        });
-    } else {
+  selectSingleArticle(req.params.article_id)
+    .then((article) => {
+      if (article === "Article not found") {
+        res.status(404).send({ message: "Article not found" });
+      } else {
+        selectCommentsSingleArticle(article.article_id)
+          .then((comments) => {
+            article.comment_count = comments.length;
+            return article;
+          })
+          .then((article) => {
+            res.status(200).send({ article });
+          });
+      }
+    })
+    .catch((err) => {
       next();
-    }
-  });
+    });
 };
 
 exports.patchSingleArticle = (req, res, next) => {

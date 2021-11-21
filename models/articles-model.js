@@ -4,7 +4,11 @@ exports.selectSingleArticle = (id) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, [id])
     .then((response) => {
-      return response.rows[0];
+      if (response.rows.length > 0) {
+        return response.rows[0];
+      } else {
+        return "Article not found";
+      }
     });
 };
 
