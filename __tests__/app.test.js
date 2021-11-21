@@ -275,12 +275,12 @@ describe("/api/articles/:article_id/comments", () => {
           ]);
         });
     });
-    test("status:200 and responds with a custom message if given article has no comments", () => {
+    test("status:200 and responds with empty array if given article has no comments", () => {
       return request(app)
         .get("/api/articles/8/comments")
         .expect(200)
         .then((res) => {
-          expect(res.body.message).toEqual("No comments");
+          expect(res.body.comments).toEqual([]);
         });
     });
     test("statusL404 and responds with message when article is not found", () => {

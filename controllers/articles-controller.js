@@ -92,7 +92,7 @@ exports.getArticleComments = (req, res, next) => {
           if (article === "Article not found") {
             res.status(404).send({ message: "Article not found" });
           } else {
-            res.status(200).send({ message: "No comments" });
+            res.status(200).send({ comments });
           }
         });
       } else {
