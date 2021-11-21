@@ -84,20 +84,26 @@ exports.getAllArticles = (req, res, next) => {
 };
 
 exports.getArticleComments = (req, res, next) => {
-  selectCommentsSingleArticle(req.params.article_id).then((comments) => {
-    if (comments) {
+  selectCommentsSingleArticle(req.params.article_id)
+    .then((comments) => {
       if (comments.length === 0) {
-        res.status(200).send({ message: "No comments" });
+        selectSingleArticle(req.params.article_id).then((article) => {
+          if (article === "Article not found") {
+            res.status(404).send({ message: "Article not found" });
+          } else {
+            res.status(200).send({ message: "No comments" });
+          }
+        });
       } else {
         for (let i = 0; i < comments.length; i++) {
           delete comments[i].article_id;
         }
         res.status(200).send({ comments });
       }
-    } else {
+    })
+    .catch(() => {
       next();
-    }
-  });
+    });
 };
 
 exports.postArticleComment = (req, res, next) => {

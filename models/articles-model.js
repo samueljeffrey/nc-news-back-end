@@ -51,10 +51,7 @@ exports.selectCommentsSingleArticle = (id) => {
     .query(`SELECT * FROM comments WHERE article_id = $1`, [id])
     .then((response) => {
       if (response.rows) return response.rows;
-      else return [];
-    })
-    .catch(() => {
-      return undefined;
+      else return "Article not found";
     });
 };
 

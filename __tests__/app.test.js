@@ -283,6 +283,14 @@ describe("/api/articles/:article_id/comments", () => {
           expect(res.body.message).toEqual("No comments");
         });
     });
+    test("statusL404 and responds with message when article is not found", () => {
+      return request(app)
+        .get("/api/articles/99999/comments")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Article not found");
+        });
+    });
     test("status:400 and responds with error message if article_id is invalid", () => {
       return request(app)
         .get("/api/articles/five/comments")
