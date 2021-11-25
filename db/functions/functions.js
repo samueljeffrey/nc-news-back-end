@@ -45,10 +45,11 @@ const createTables = () => {
       return db.query(`CREATE TABLE comments (
     comment_id SERIAL PRIMARY KEY,
     author VARCHAR(20) REFERENCES users(username),
-    article_id INT REFERENCES articles(article_id) ON DELETE CASCADE,
     votes INT DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    body VARCHAR(1000) NOT NULL
+    body VARCHAR(1000) NOT NULL,
+    article_id INT NOT NULL,
+    FOREIGN KEY (article_id) REFERENCES articles (article_id) ON DELETE CASCADE
   );`);
     });
 };
