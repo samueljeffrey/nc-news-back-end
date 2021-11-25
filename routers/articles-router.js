@@ -3,6 +3,7 @@ const { handleUrlErrors, articleIdError } = require("../errors/errors.js");
 const {
   getSingleArticle,
   patchSingleArticle,
+  postSingleArticle,
   getAllArticles,
   getArticleComments,
   postArticleComment,
@@ -18,7 +19,7 @@ articlesRouter
   .get(getSingleArticle)
   .patch(patchSingleArticle);
 
-articlesRouter.route("/").get(getAllArticles);
+articlesRouter.route("/").get(getAllArticles).post(postSingleArticle);
 articlesRouter.use("/*", articleIdError);
 articlesRouter.use("*", handleUrlErrors);
 

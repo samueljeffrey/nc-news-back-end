@@ -1,6 +1,7 @@
 const {
   selectAllArticles,
   selectSingleArticle,
+  insertSingleArticle,
   selectCommentsSingleArticle,
   updateSingleArticle,
   insertArticleComment,
@@ -52,6 +53,21 @@ exports.patchSingleArticle = (req, res, next) => {
     .catch(() => {
       res.status(400).send({ message: "Invalid article id" });
     });
+};
+
+exports.postSingleArticle = (req, res, next) => {
+  console.log("in articles controller");
+  insertSingleArticle(req.body).then((article) => {
+    console.log("in articles controller then block");
+    selectCommentsSingleArticle(article.article_id)
+      .then((comments) => {
+        article.comment_count = comments.length;
+        return article;
+      })
+      .then((article) => {
+        res.status(201).send({ article });
+      });
+  });
 };
 
 exports.getAllArticles = (req, res, next) => {

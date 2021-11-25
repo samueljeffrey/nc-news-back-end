@@ -248,6 +248,109 @@ describe("/api/articles", () => {
         });
     });
   });
+  describe("POST", () => {
+    test.only("status:201 and responds with newly posted article if body of request is valid", () => {
+      return request(app)
+        .post("/api/articles")
+        .send({
+          username: "rogersop",
+          body: "This is the body of my new article",
+          title: "New Article",
+          topic: "cats",
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.article.body).toEqual(
+            "This is the body of my new article"
+          );
+          expect(res.body.article.votes).toEqual(0);
+          expect(res.body.article.article_id).toEqual(13);
+          expect(res.body.article.author).toEqual("rogersop");
+          expect(res.body.article.topic).toEqual("cats");
+          expect(res.body.article.title).toEqual("New Article");
+          expect(res.body.article.comment_count).toEqual(0);
+        });
+    });
+    test("status:201 and responds with newly posted comment, ignoring extra keys in request body", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          username: "rogersop",
+          body: "Great article, very interesting indeed",
+          extra: "extraitem1",
+          another: "extraitem2",
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.comment.body).toEqual(
+            "Great article, very interesting indeed"
+          );
+          expect(res.body.comment.votes).toEqual(0);
+          expect(res.body.comment.comment_id).toEqual(19);
+          expect(res.body.comment.author).toEqual("rogersop");
+        });
+    });
+    test("status:404 and responds with message if article is not found", () => {
+      return request(app)
+        .post("/api/articles/99999/comments")
+        .send({
+          username: "rogersop",
+          body: "Great article, very interesting indeed",
+        })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Article not found");
+        });
+    });
+    test("status:400 and responds with error message if article_id is invalid", () => {
+      return request(app)
+        .post("/api/articles/eight/comments")
+        .send({
+          username: "rogersop",
+          body: "Great article, very interesting indeed",
+        })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid article id");
+        });
+    });
+    test("status:400 and responds with custom error message if request body is missing necessary keys", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          person: "rogersop",
+          writes: "Great article, very interesting indeed",
+        })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Malformed request body");
+        });
+    });
+    test("status:404 and responds with error message if username is not found", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          username: "wrongusername",
+          body: "12345",
+        })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Username not found");
+        });
+    });
+    test("status:400 and responds with custom error message if request any value on request body is incompatible with database", () => {
+      return request(app)
+        .post("/api/articles/8/comments")
+        .send({
+          username: 12345,
+          body: 12345,
+        })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Malformed request body");
+        });
+    });
+  });
 });
 
 describe("/api/articles/:article_id/comments", () => {
