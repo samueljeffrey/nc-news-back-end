@@ -422,6 +422,41 @@ describe("/api/comments/:comment_id", () => {
         });
     });
   });
+  describe("PATCH", () => {
+    test("status:200 and responds with the updated comment object if found and updated with valid request body", () => {
+      return request(app)
+        .patch("/api/comments/4")
+        .send({ inc_votes: 12 })
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comment).toEqual({
+            body: " I carry a log — yes. Is it funny to you? It is not to me.",
+            author: "icellusedkars",
+            comment_id: 4,
+            created_at: new Date(1582459260000).toISOString(),
+            votes: -88,
+          });
+        });
+    });
+    test("status:400 and responds with custom error message if given an invalid comment id", () => {
+      return request(app)
+        .patch("/api/comments/four")
+        .send({ inc_votes: 12 })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid comment id");
+        });
+    });
+    test("status:400 and responds with custom error message if given a malformed request body", () => {
+      return request(app)
+        .patch("/api/comments/4")
+        .send({ inc_votes: "abc" })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Malformed request body");
+        });
+    });
+  });
 });
 
 describe("/api", () => {
@@ -486,44 +521,6 @@ describe("/api/users/:username", () => {
         .expect(400)
         .then((res) => {
           expect(res.body.message).toEqual("Invalid username");
-        });
-    });
-  });
-});
-
-describe("/api/comments/comment_id", () => {
-  describe("PATCH", () => {
-    test("status:200 and responds with the updated comment object if found and updated with valid request body", () => {
-      return request(app)
-        .patch("/api/comments/4")
-        .send({ inc_votes: 12 })
-        .expect(200)
-        .then((res) => {
-          expect(res.body.comment).toEqual({
-            body: " I carry a log — yes. Is it funny to you? It is not to me.",
-            author: "icellusedkars",
-            comment_id: 4,
-            created_at: new Date(1582459260000).toISOString(),
-            votes: -88,
-          });
-        });
-    });
-    test("status:400 and responds with custom error message if given an invalid comment id", () => {
-      return request(app)
-        .patch("/api/comments/four")
-        .send({ inc_votes: 12 })
-        .expect(400)
-        .then((res) => {
-          expect(res.body.message).toEqual("Invalid comment id");
-        });
-    });
-    test("status:400 and responds with custom error message if given a malformed request body", () => {
-      return request(app)
-        .patch("/api/comments/4")
-        .send({ inc_votes: "abc" })
-        .expect(400)
-        .then((res) => {
-          expect(res.body.message).toEqual("Malformed request body");
         });
     });
   });

@@ -135,6 +135,21 @@ const data = {
         "deletes the comment with the given id, if found, and returns a 204 status with no response body",
       parameter: "placeholder :comment_id in path must be filled by a number",
     },
+    PATCH: {
+      description:
+        "updates the number of votes on the comment with the given id, if found, according to the given request body, and returns the updated comment object",
+      parameter: "placeholder :comment_id in path must be filled by a number",
+      "input example": {
+        inc_votes: 4,
+      },
+      "output example": {
+        author: "sam123",
+        comment_id: 123,
+        body: "The first step is to...",
+        created_at: 1234567890,
+        votes: 5,
+      },
+    },
   },
   "/api/users": {
     GET: {

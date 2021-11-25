@@ -10,7 +10,7 @@ This project has been to develop an API which can imitate the functionality of a
 
 ## Try the API
 
-#### The hosted API can be found [here](https://samueljeffrey-nc-news.herokuapp.com/).
+#### The hosted API can be found [here](https://samueljeffrey-nc-news.herokuapp.com/api).
 
 Adding "/api" to the end of the URL and pressing enter will allow you to see a JSON object which will show you all of the endpoints that the API has, with a description of each. Any other URL ending that you would type would only result in a JSON object with message "Path not found".
 
