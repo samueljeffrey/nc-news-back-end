@@ -49,6 +49,11 @@ const data = {
         comment_count: 0,
       },
     },
+    DELETE: {
+      description:
+        "deletes the article with the given id, if found, and returns a 204 status with no response body",
+      parameter: "placeholder :article_id in path must be filled by a number",
+    },
   },
   "/api/articles": {
     GET: {
@@ -89,6 +94,26 @@ const data = {
         },
       ],
     },
+    POST: {
+      description:
+        "using the request body, a new article is created and added to the list of articles, a the full article object is returned",
+      "input example": {
+        username: "sam3",
+        body: "this is the body",
+        title: "Title",
+        topic: "topic4",
+      },
+      "output example": {
+        article_id: 23,
+        votes: 0,
+        title: "Title",
+        created_at: 123459,
+        comment_count: 0,
+        author: "sam3",
+        topic: "topic4",
+        body: "this is the body",
+      },
+    },
   },
   "/api/articles/:article_id/comments": {
     GET: {
@@ -118,14 +143,14 @@ const data = {
       parameter: "placeholder :article_id in path must be filled by a number",
       "input example": {
         username: "sam3",
-        body: "very lame",
+        body: "this is the body",
       },
       "output example": {
         comment_id: 23,
         votes: 0,
         created_at: 123459,
         author: "sam3",
-        body: "very lame",
+        body: "this is the body",
       },
     },
   },
