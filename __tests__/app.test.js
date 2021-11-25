@@ -126,6 +126,28 @@ describe("/api/articles/:article_id", () => {
         });
     });
   });
+
+  describe("DELETE", () => {
+    test("status:204 and respond with confirmation message if the article was found and deleted", () => {
+      return request(app).delete("/api/articles/3").expect(204);
+    });
+    test("status:400 and respond with error message if article_id is not a number", () => {
+      return request(app)
+        .delete("/api/articles/three")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Invalid article id");
+        });
+    });
+    test("status:404 and respond with error message if article_id is a number but article doesn't exist", () => {
+      return request(app)
+        .delete("/api/articles/99999")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Article not found");
+        });
+    });
+  });
 });
 
 describe("/api/articles", () => {

@@ -2,6 +2,7 @@ const {
   selectAllArticles,
   selectSingleArticle,
   insertSingleArticle,
+  removeArticle,
   selectCommentsSingleArticle,
   updateSingleArticle,
   insertArticleComment,
@@ -77,6 +78,20 @@ exports.postSingleArticle = (req, res, next) => {
           res.status(404).send({ message: "Username not found" });
         }
       }
+    });
+};
+
+exports.deleteSingleArticle = (req, res, next) => {
+  removeArticle(req.params.article_id)
+    .then((message) => {
+      if (message === "Article deleted") {
+        res.status(204).send();
+      } else if (message === "Article not found") {
+        res.status(404).send({ message });
+      }
+    })
+    .catch(() => {
+      next();
     });
 };
 

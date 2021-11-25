@@ -4,6 +4,7 @@ const {
   getSingleArticle,
   patchSingleArticle,
   postSingleArticle,
+  deleteSingleArticle,
   getAllArticles,
   getArticleComments,
   postArticleComment,
@@ -17,7 +18,8 @@ articlesRouter
 articlesRouter
   .route("/:article_id")
   .get(getSingleArticle)
-  .patch(patchSingleArticle);
+  .patch(patchSingleArticle)
+  .delete(deleteSingleArticle);
 
 articlesRouter.route("/").get(getAllArticles).post(postSingleArticle);
 articlesRouter.use("/*", articleIdError);

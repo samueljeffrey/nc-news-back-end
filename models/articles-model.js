@@ -47,6 +47,18 @@ exports.insertSingleArticle = (body) => {
     });
 };
 
+exports.removeArticle = (id) => {
+  return db
+    .query(`DELETE FROM articles WHERE article_id = $1 RETURNING *;`, [id])
+    .then((response) => {
+      if (response.rows.length === 0) {
+        return "Article not found";
+      } else if (response.rows.length) {
+        return "Article deleted";
+      }
+    });
+};
+
 exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
   let articlesQuery =
     "SELECT articles.*, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id";
