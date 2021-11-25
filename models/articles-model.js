@@ -37,19 +37,14 @@ exports.updateSingleArticle = (id, newVotes) => {
 };
 
 exports.insertSingleArticle = (body) => {
-  console.log("in articles model");
-  if (body.username && body.body && body.topic && body.title) {
-    console.log("in articles model if block");
-    return db
-      .query(
-        `INSERT INTO articles (title, author, body, topic) VALUES ($1, $2, $3, $4) RETURNING *;`,
-        [body.title, body.username, body.body, body.topic]
-      )
-      .then((response) => {
-        console.log("in articles model then block");
-        return response.rows[0];
-      });
-  }
+  return db
+    .query(
+      `INSERT INTO articles (title, author, body, topic) VALUES ($1, $2, $3, $4) RETURNING *;`,
+      [body.title, body.username, body.body, body.topic]
+    )
+    .then((response) => {
+      return response.rows[0];
+    });
 };
 
 exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {

@@ -56,18 +56,28 @@ exports.patchSingleArticle = (req, res, next) => {
 };
 
 exports.postSingleArticle = (req, res, next) => {
-  console.log("in articles controller");
-  insertSingleArticle(req.body).then((article) => {
-    console.log("in articles controller then block");
-    selectCommentsSingleArticle(article.article_id)
-      .then((comments) => {
-        article.comment_count = comments.length;
-        return article;
-      })
-      .then((article) => {
-        res.status(201).send({ article });
-      });
-  });
+  insertSingleArticle(req.body)
+    .then((article) => {
+      selectCommentsSingleArticle(article.article_id)
+        .then((comments) => {
+          article.comment_count = comments.length;
+          return article;
+        })
+        .then((article) => {
+          res.status(201).send({ article });
+        });
+    })
+    .catch((err) => {
+      if (err.code === "23502") {
+        res.status(400).send({ message: "Malformed request body" });
+      } else if (err.code === "23503") {
+        if (err.detail.slice(-9) === '"topics".') {
+          res.status(404).send({ message: "Topic not found" });
+        } else {
+          res.status(404).send({ message: "Username not found" });
+        }
+      }
+    });
 };
 
 exports.getAllArticles = (req, res, next) => {
