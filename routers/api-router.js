@@ -12,6 +12,7 @@ apiRouter.use("/articles", articlesRouter);
 apiRouter.use("/comments", commentsRouter);
 
 apiRouter.route("/").get(getApi);
+
 apiRouter.use("*", handleUrlErrors);
 
 module.exports = apiRouter;
