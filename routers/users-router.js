@@ -1,5 +1,4 @@
 const usersRouter = require("express").Router();
-const { handleUrlErrors } = require("../errors/errors.js");
 const {
   getUsers,
   getSingleUser,

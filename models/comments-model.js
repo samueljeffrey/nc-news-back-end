@@ -5,13 +5,13 @@ exports.removeComment = (id) => {
     .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *;`, [id])
     .then((response) => {
       if (response.rows.length === 0) {
-        return "Comment not found";
-      } else if (response.rows.length) {
-        return "Comment deleted";
+        return Promise.reject("not found");
       }
+      return "Comment deleted";
     })
     .catch((err) => {
-      return undefined;
+      if (err === "not found") return Promise.reject("Comment not found");
+      return Promise.reject("Invalid comment id");
     });
 };
 
@@ -19,7 +19,8 @@ exports.updateSingleComment = (id, newVotes) => {
   return db
     .query(`SELECT * FROM comments WHERE comment_id = $1;`, [id])
     .then((comment) => {
-      return comment.rows[0].votes;
+      if (comment.rows.length > 0) return comment.rows[0].votes;
+      return Promise.reject("not found");
     })
     .then((currentVotes) => {
       return db
@@ -31,7 +32,12 @@ exports.updateSingleComment = (id, newVotes) => {
           return updatedComment.rows[0];
         })
         .catch(() => {
-          return undefined;
+          return Promise.reject("malformed");
         });
+    })
+    .catch((err) => {
+      if (err === "not found") return Promise.reject("Comment not found");
+      if (err === "malformed") return Promise.reject("Malformed request body");
+      return Promise.reject("Invalid comment id");
     });
 };

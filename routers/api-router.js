@@ -6,6 +6,7 @@ const commentsRouter = require("./comments-router");
 const {
   handleUrlErrors,
   articleIdError,
+  commentIdError,
   requestBodyError,
   topicError,
   usernameError,
@@ -21,6 +22,7 @@ apiRouter.use("/comments", commentsRouter);
 apiRouter.route("/").get(getApi);
 
 apiRouter.use("*", articleIdError);
+apiRouter.use("*", commentIdError);
 apiRouter.use("*", requestBodyError);
 apiRouter.use("*", topicError);
 apiRouter.use("*", queryError);

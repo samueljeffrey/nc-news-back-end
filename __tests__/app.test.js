@@ -557,6 +557,15 @@ describe("/api/comments/:comment_id", () => {
           expect(res.body.message).toEqual("Invalid comment id");
         });
     });
+    test("status:404 and responds with error message if comment id is a number but comment doesn't exist", () => {
+      return request(app)
+        .patch("/api/comments/99999")
+        .send({ inc_votes: 12 })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Comment not found");
+        });
+    });
     test("status:400 and responds with custom error message if given a malformed request body", () => {
       return request(app)
         .patch("/api/comments/4")
