@@ -8,6 +8,4 @@ const {
 usersRouter.route("/:username").get(getSingleUser);
 usersRouter.route("/").get(getUsers);
 
-usersRouter.use("*", handleUrlErrors);
-
 module.exports = usersRouter;

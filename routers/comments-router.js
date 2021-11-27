@@ -9,8 +9,7 @@ commentsRouter
   .route("/:comment_id")
   .delete(deleteComment)
   .patch(patchSingleComment);
-commentsRouter.use("/*", commentIdError);
 
-commentsRouter.use("*", handleUrlErrors);
+commentsRouter.use("/*", commentIdError);
 
 module.exports = commentsRouter;

@@ -23,6 +23,5 @@ articlesRouter
 
 articlesRouter.route("/").get(getAllArticles).post(postSingleArticle);
 articlesRouter.use("/*", articleIdError);
-articlesRouter.use("*", handleUrlErrors);
 
 module.exports = articlesRouter;
