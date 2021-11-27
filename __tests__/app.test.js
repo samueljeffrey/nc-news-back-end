@@ -345,7 +345,7 @@ describe("/api/articles", () => {
     });
     test("status:404 and responds with error message if username is not found", () => {
       return request(app)
-        .post("/api/articles/8/comments")
+        .post("/api/articles")
         .send({
           username: "WRONGUSERNAME",
           body: "body",

@@ -7,7 +7,6 @@ const {
   updateSingleArticle,
   insertArticleComment,
 } = require("../models/articles-model.js");
-const { selectTopics } = require("../models/topics-model.js");
 const { selectSingleUser } = require("../models/users-model.js");
 
 exports.getSingleArticle = (req, res, next) => {
@@ -57,15 +56,7 @@ exports.postSingleArticle = (req, res, next) => {
         });
     })
     .catch((err) => {
-      if (err.code === "23502") {
-        res.status(400).send({ message: "Malformed request body" });
-      } else if (err.code === "23503") {
-        if (err.detail.slice(-9) === '"topics".') {
-          res.status(404).send({ message: "Topic not found" });
-        } else {
-          res.status(404).send({ message: "Username not found" });
-        }
-      }
+      next(err);
     });
 };
 
@@ -83,29 +74,13 @@ exports.getAllArticles = (req, res, next) => {
   const { sort_by, order, topic } = req.query;
   selectAllArticles(sort_by, order, topic)
     .then((articles) => {
-      if (articles.length === 0) {
-        selectTopics().then((topics) => {
-          let topicExists = false;
-          for (let i = 0; i < topics.length; i++) {
-            if (topics[i].slug === topic) {
-              topicExists = true;
-            }
-          }
-          if (topicExists) {
-            res.status(200).send({ articles });
-          } else {
-            res.status(404).send({ message: "Topic not found" });
-          }
-        });
-      } else {
-        for (let i = 0; i < articles.length; i++) {
-          articles[i].comment_count = parseFloat(articles[i].comment_count);
-        }
-        res.status(200).send({ articles });
-      }
+      articles.forEach((article) => {
+        article.comment_count = parseInt(article.comment_count);
+      });
+      res.status(200).send({ articles });
     })
-    .catch(() => {
-      res.status(400).send({ message: "Invalid query in request" });
+    .catch((err) => {
+      next(err);
     });
 };
 

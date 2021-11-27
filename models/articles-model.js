@@ -1,4 +1,5 @@
 const db = require("../db");
+const { selectTopics } = require("./topics-model.js");
 
 exports.selectSingleArticle = (id) => {
   return db
@@ -43,13 +44,32 @@ exports.updateSingleArticle = (id, body) => {
 };
 
 exports.insertSingleArticle = (body) => {
-  return db
-    .query(
-      `INSERT INTO articles (title, author, body, topic) VALUES ($1, $2, $3, $4) RETURNING *;`,
-      [body.title, body.username, body.body, body.topic]
-    )
-    .then((response) => {
-      return response.rows[0];
+  return selectTopics()
+    .then((topics) => {
+      if (
+        body.topic &&
+        topics.filter((eachTopic) => eachTopic.slug === body.topic).length > 0
+      ) {
+        return db
+          .query(
+            `INSERT INTO articles (title, author, body, topic) VALUES ($1, $2, $3, $4) RETURNING *;`,
+            [body.title, body.username, body.body, body.topic]
+          )
+          .then((response) => {
+            return response.rows[0];
+          });
+      } else if (body.topic) {
+        return Promise.reject("topic not found");
+      } else {
+        return Promise.reject("malformed");
+      }
+    })
+    .catch((err) => {
+      if (err === "topic not found") return Promise.reject("Topic not found");
+      if (err === "malformed") return Promise.reject("Malformed request body");
+      if (err.detail.slice(-8) === '"users".') {
+        return Promise.reject("Username not found");
+      }
     });
 };
 
@@ -74,9 +94,27 @@ exports.selectAllArticles = (sort_by = "created_at", order = "DESC", topic) => {
     "SELECT articles.*, COUNT(comments.comment_id) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id";
   if (topic) articlesQuery += ` WHERE articles.topic = '${topic}'`;
   articlesQuery += ` GROUP BY articles.article_id ORDER BY ${sort_by} ${order};`;
-  return db.query(articlesQuery).then((response) => {
-    return response.rows;
-  });
+  return db
+    .query(articlesQuery)
+    .then((response) => {
+      if (response.rows.length > 0) {
+        return response.rows;
+      } else {
+        return selectTopics().then((topics) => {
+          if (
+            topics.filter((eachTopic) => eachTopic.slug === topic).length > 0
+          ) {
+            return response.rows;
+          } else {
+            return Promise.reject("not found");
+          }
+        });
+      }
+    })
+    .catch((err) => {
+      if (err === "not found") return Promise.reject("Topic not found");
+      return Promise.reject("Invalid query in request");
+    });
 };
 
 exports.selectCommentsSingleArticle = (id) => {
