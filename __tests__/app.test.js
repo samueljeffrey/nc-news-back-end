@@ -625,12 +625,12 @@ describe("/api/users/:username", () => {
           });
         });
     });
-    test("status:400 and responds with custom message if username is invalid", () => {
+    test("status:404 and responds with custom message if username is invalid", () => {
       return request(app)
         .get("/api/users/wrongusername")
-        .expect(400)
+        .expect(404)
         .then((res) => {
-          expect(res.body.message).toEqual("Invalid username");
+          expect(res.body.message).toEqual("Username not found");
         });
     });
   });
