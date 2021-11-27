@@ -1,5 +1,4 @@
 const articlesRouter = require("express").Router();
-const { handleUrlErrors, articleIdError } = require("../errors/errors.js");
 const {
   getSingleArticle,
   patchSingleArticle,
@@ -22,6 +21,5 @@ articlesRouter
   .delete(deleteSingleArticle);
 
 articlesRouter.route("/").get(getAllArticles).post(postSingleArticle);
-articlesRouter.use("/*", articleIdError);
 
 module.exports = articlesRouter;

@@ -13,46 +13,34 @@ const { selectSingleUser } = require("../models/users-model.js");
 exports.getSingleArticle = (req, res, next) => {
   selectSingleArticle(req.params.article_id)
     .then((article) => {
-      if (article === "Article not found") {
-        res.status(404).send({ message: "Article not found" });
-      } else {
-        selectCommentsSingleArticle(article.article_id)
-          .then((comments) => {
-            article.comment_count = comments.length;
-            return article;
-          })
-          .then((article) => {
-            res.status(200).send({ article });
-          });
-      }
+      selectCommentsSingleArticle(article.article_id)
+        .then((comments) => {
+          article.comment_count = comments.length;
+          return article;
+        })
+        .then((article) => {
+          res.status(200).send({ article });
+        });
     })
     .catch((err) => {
-      next();
+      next(err);
     });
 };
 
 exports.patchSingleArticle = (req, res, next) => {
-  updateSingleArticle(req.params.article_id, req.body.inc_votes)
+  updateSingleArticle(req.params.article_id, req.body)
     .then((article) => {
-      if (article === "Article not found") {
-        res.status(404).send({ message: "Article not found" });
-      } else if (article === "Invalid input") {
-        res.status(400).send({ message: "Invalid input" });
-      } else if (article) {
-        selectCommentsSingleArticle(article.article_id)
-          .then((comments) => {
-            article.comment_count = comments.length;
-            return article;
-          })
-          .then((article) => {
-            res.status(201).send({ article });
-          });
-      } else {
-        next();
-      }
+      selectCommentsSingleArticle(article.article_id)
+        .then((comments) => {
+          article.comment_count = comments.length;
+          return article;
+        })
+        .then((article) => {
+          res.status(201).send({ article });
+        });
     })
-    .catch(() => {
-      res.status(400).send({ message: "Invalid article id" });
+    .catch((err) => {
+      next(err);
     });
 };
 
@@ -83,15 +71,11 @@ exports.postSingleArticle = (req, res, next) => {
 
 exports.deleteSingleArticle = (req, res, next) => {
   removeArticle(req.params.article_id)
-    .then((message) => {
-      if (message === "Article deleted") {
-        res.status(204).send();
-      } else if (message === "Article not found") {
-        res.status(404).send({ message });
-      }
+    .then(() => {
+      res.status(204).send();
     })
-    .catch(() => {
-      next();
+    .catch((err) => {
+      next(err);
     });
 };
 

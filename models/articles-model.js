@@ -7,32 +7,38 @@ exports.selectSingleArticle = (id) => {
       if (response.rows.length > 0) {
         return response.rows[0];
       } else {
-        return "Article not found";
+        return Promise.reject("not found");
       }
+    })
+    .catch((err) => {
+      if (err === "not found") return Promise.reject("Article not found");
+      return Promise.reject("Invalid article id");
     });
 };
 
-exports.updateSingleArticle = (id, newVotes) => {
+exports.updateSingleArticle = (id, body) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, [id])
     .then((article) => {
-      if (article.rows[0] === undefined) return undefined;
-      return article.rows[0].votes;
+      if (article.rows.length > 0) {
+        return article.rows[0].votes;
+      } else {
+        return Promise.reject("not found");
+      }
     })
     .then((currentVotes) => {
-      if (currentVotes === undefined) return "Article not found";
-      if (typeof newVotes !== "number") return "Invalid input";
       return db.query(
         `UPDATE articles SET votes = $1 WHERE article_id = $2 RETURNING *`,
-        [newVotes + currentVotes, id]
+        [body.inc_votes + currentVotes, id]
       );
     })
     .then((updatedArticle) => {
-      if (updatedArticle.rows) {
-        return updatedArticle.rows[0];
-      } else {
-        return updatedArticle;
-      }
+      return updatedArticle.rows[0];
+    })
+    .catch((err) => {
+      if (err === "not found") return Promise.reject("Article not found");
+      if (!/^[0-9]*$/.test(id)) return Promise.reject("Invalid article id");
+      return Promise.reject("Malformed request body");
     });
 };
 
@@ -51,11 +57,15 @@ exports.removeArticle = (id) => {
   return db
     .query(`DELETE FROM articles WHERE article_id = $1 RETURNING *;`, [id])
     .then((response) => {
-      if (response.rows.length === 0) {
-        return "Article not found";
-      } else if (response.rows.length) {
-        return "Article deleted";
+      if (response.rows.length > 0) {
+        return "done";
+      } else {
+        return Promise.reject("not found");
       }
+    })
+    .catch((err) => {
+      if (err === "not found") return Promise.reject("Article not found");
+      return Promise.reject("Invalid article id");
     });
 };
 

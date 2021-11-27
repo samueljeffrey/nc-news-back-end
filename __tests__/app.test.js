@@ -119,10 +119,10 @@ describe("/api/articles/:article_id", () => {
     test("status:400 and responds with error message if request body object is incorrectly formed", () => {
       return request(app)
         .patch("/api/articles/1")
-        .send({ anotherVote: 5, inc_votes: "5" })
+        .send({ new_votes: 5, inc_votes: "one" })
         .expect(400)
         .then((res) => {
-          expect(res.body.message).toEqual("Invalid input");
+          expect(res.body.message).toEqual("Malformed request body");
         });
     });
   });
