@@ -8,8 +8,14 @@ exports.articleIdError = (err, req, res, next) => {
   }
 };
 
-exports.commentIdError = (req, res) => {
-  res.status(400).send({ message: "Invalid comment id" });
+exports.commentIdError = (err, req, res, next) => {
+  if (err === "Comment not found") {
+    res.status(404).send({ message: err });
+  } else if (err === "Invalid comment id") {
+    res.status(400).send({ message: err });
+  } else {
+    next(err);
+  }
 };
 
 exports.requestBodyError = (err, req, res, next) => {

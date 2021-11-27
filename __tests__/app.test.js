@@ -393,7 +393,7 @@ describe("/api/articles/:article_id/comments", () => {
           expect(res.body.comments).toEqual([]);
         });
     });
-    test("statusL404 and responds with message when article is not found", () => {
+    test("status:404 and responds with message when article is not found", () => {
       return request(app)
         .get("/api/articles/99999/comments")
         .expect(404)

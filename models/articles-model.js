@@ -1,5 +1,6 @@
 const db = require("../db");
 const { selectTopics } = require("./topics-model.js");
+const { selectUsers } = require("./users-model.js");
 
 exports.selectSingleArticle = (id) => {
   return db
@@ -121,20 +122,54 @@ exports.selectCommentsSingleArticle = (id) => {
   return db
     .query(`SELECT * FROM comments WHERE article_id = $1`, [id])
     .then((response) => {
-      if (response.rows) return response.rows;
-      else return "Article not found";
+      if (response.rows.length > 0) return response.rows;
+      return this.selectSingleArticle(id)
+        .then(() => {
+          return response.rows;
+        })
+        .catch(() => {
+          return Promise.reject("not found");
+        });
+    })
+    .catch((err) => {
+      if (err === "not found") return Promise.reject("Article not found");
+      return Promise.reject("Invalid article id");
     });
 };
 
 exports.insertArticleComment = (id, body) => {
-  if (body.username && body.body) {
-    return db
-      .query(
-        `INSERT INTO comments (article_id, author, body) VALUES($1, $2, $3) RETURNING *;`,
-        [id, body.username, body.body]
-      )
-      .then((response) => {
-        return response.rows[0];
-      });
-  }
+  return this.selectSingleArticle(id)
+    .then(() => {
+      if (body.username && body.body) {
+        return db
+          .query(
+            `INSERT INTO comments (article_id, author, body) VALUES($1, $2, $3) RETURNING *;`,
+            [id, body.username, body.body]
+          )
+          .then((response) => {
+            return response.rows[0];
+          });
+      } else {
+        return Promise.reject("Malformed request body");
+      }
+    })
+    .catch((err) => {
+      if (err.code) {
+        return selectUsers().then((users) => {
+          if (
+            users.filter((eachUser) => eachUser.username === body.username)
+              .length === 1
+          ) {
+            return Promise.reject("Malformed request body");
+          } else {
+            if (body.username && typeof body.username === "string") {
+              return Promise.reject("Username not found");
+            } else {
+              return Promise.reject("Malformed request body");
+            }
+          }
+        });
+      }
+      return Promise.reject(err);
+    });
 };

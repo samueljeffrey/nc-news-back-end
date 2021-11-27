@@ -87,58 +87,22 @@ exports.getAllArticles = (req, res, next) => {
 exports.getArticleComments = (req, res, next) => {
   selectCommentsSingleArticle(req.params.article_id)
     .then((comments) => {
-      if (comments.length === 0) {
-        selectSingleArticle(req.params.article_id).then((article) => {
-          if (article === "Article not found") {
-            res.status(404).send({ message: "Article not found" });
-          } else {
-            res.status(200).send({ comments });
-          }
-        });
-      } else {
-        for (let i = 0; i < comments.length; i++) {
-          delete comments[i].article_id;
-        }
-        res.status(200).send({ comments });
+      for (let i = 0; i < comments.length; i++) {
+        delete comments[i].article_id;
       }
+      res.status(200).send({ comments });
     })
-    .catch(() => {
-      next();
+    .catch((err) => {
+      next(err);
     });
 };
 
 exports.postArticleComment = (req, res, next) => {
-  selectSingleArticle(req.params.article_id)
-    .then((article) => {
-      if (article === "Article not found") {
-        res.status(404).send({ message: "Article not found" });
-      } else {
-        insertArticleComment(req.params.article_id, req.body)
-          .then((comment) => {
-            if (!comment.code) {
-              res.status(201).send({ comment });
-            } else if (comment.code === "22P02") {
-              next();
-            } else {
-              res.status(400).send({ message: "Malformed request body" });
-            }
-          })
-          .catch((err) => {
-            selectSingleUser(req.body.username).then((user) => {
-              if (user) {
-                res.status(400).send({ message: "Malformed request body" });
-              } else {
-                res.status(404).send({ message: "Username not found" });
-              }
-            });
-          });
-      }
+  insertArticleComment(req.params.article_id, req.body)
+    .then((comment) => {
+      res.status(201).send({ comment });
     })
     .catch((err) => {
-      if (err.code === "22P02") {
-        next();
-      } else {
-        res.status(400).send({ message: "Malformed request body" });
-      }
+      next(err);
     });
 };
