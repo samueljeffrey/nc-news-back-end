@@ -10,9 +10,9 @@ This project has been to develop an API which can imitate the functionality of a
 
 ## Try the API
 
-#### The hosted API can be found [here](https://samueljeffrey-nc-news.herokuapp.com/api).
+#### The hosted API can be found here: https://samueljeffrey-nc-news.herokuapp.com/api.
 
-Adding "/api" to the end of the URL and pressing enter will allow you to see a JSON object which will show you all of the endpoints that the API has, with a description of each. Any other URL ending that you would type would only result in a JSON object with message "Path not found".
+#### I've also made a hosted front end React App, which makes use of this API, and can be found here: https://samuel-jeffrey-nc-news.netlify.app/.
 
 ---
 
@@ -37,7 +37,7 @@ code .
 
 ### 2. Install dependencies
 
-For this API, your device will require several dependencies, some of which must be installed as dev dependencies. To first install the dev dependencies for node, all of which allow you to use the app.test.js file correctly with Jest technology, type the following commands into your code editor's terminal:
+For this API, your device will require several dependencies, some of which must be installed as dev dependencies. Your code editor will also need to have Node installed, version v16.0.0 being the minimum required. To first install the dev dependencies for node, all of which allow you to use the app.test.js file correctly with Jest technology, type the following commands into your code editor's terminal:
 
 ```http
 npm install jest -D
