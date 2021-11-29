@@ -12,7 +12,7 @@ This project has been to develop an API which can imitate the functionality of a
 
 #### The hosted API can be found here: https://samueljeffrey-nc-news.herokuapp.com/api.
 
-#### I've also made a hosted front end React App, which makes use of this API, and can be found here: https://samuel-jeffrey-nc-news.netlify.app/.
+#### I've also made a hosted front end React App, which makes use of this API, and can be found here: https://samuel-jeffrey-nc-news.netlify.app/. Its Github repository is found here: https://github.com/samueljeffrey/nc-news.
 
 ---
 
