@@ -37,20 +37,10 @@ code .
 
 ### 2. Install dependencies
 
-For this API, your device will require several dependencies, some of which must be installed as dev dependencies. Your code editor will also need to have Node installed, version v16.0.0 being the minimum required. To first install the dev dependencies for node, all of which allow you to use the app.test.js file correctly with Jest technology, type the following commands into your code editor's terminal:
+For this API, your device will require several dependencies, some of which must be installed as dev dependencies. Your code editor will also need to have Node installed, version v16.0.0 being the minimum required. To first install the dev dependencies for node, all of which allow you to use the app.test.js file correctly with Jest technology, type the following command into your code editor's terminal:
 
 ```http
-npm install jest -D
-npm install jest-sorted -D
-npm install supertest -D
-```
-
-The next dependencies allow you to use Express and PostgreSQL, so that you can interact with the database when using the API. Type the following into your code editor's terminal:
-
-```http
-npm install express --save
-npm install pg
-npm install pg-format
+npm install
 ```
 
 ---
